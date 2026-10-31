@@ -1,0 +1,32 @@
+name: Pipeline SonarCloud y Semgrep con Juice Shop
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  analisis-sonar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout de código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Configuración de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" 
+
+      - name: Instalar dependencias
+        run: |
+          npm ci
+
+      - name: Análisis de SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v3.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
