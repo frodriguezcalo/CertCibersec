@@ -24,7 +24,7 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          npm ci
+          npm install
 
       - name: Análisis de SonarCloud
         uses: sonarsource/sonarcloud-github-action@v3.1.0
