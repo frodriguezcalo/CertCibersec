@@ -45,7 +45,7 @@ jobs:
 
   analisis-sca-trivy:
     runs-on: ubuntu-latest
-    needs: analisis-sonar
+    needs: analisis-semgrep
     steps:
       - name: Checkout de código
         uses: actions/checkout@v4
@@ -56,4 +56,4 @@ jobs:
           scan-type: 'fs'             # fs es filesystem, para que analice todo 
           scan-ref: '.'               # Raíz del proyecto
           format: 'table'             # Muestra la tabla de resultados en el log de Actions
-          severity: 'MEDIUM, HIGH,CRITICAL'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
+          severity: 'MEDIUM,HIGH,CRITICAL'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
