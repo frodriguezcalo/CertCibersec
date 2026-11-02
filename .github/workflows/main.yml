@@ -63,6 +63,7 @@ jobs:
 ##opcion 2 con GitHub Security, formato SARIF, mas lindo visualmente
   analisis-sca-trivy:
     runs-on: ubuntu-latest
+    needs: analisis-semgrep
     steps:
       - name: Checkout de código
         uses: actions/checkout@v4
@@ -73,11 +74,12 @@ jobs:
           curl -L https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o contrib/html.tpl
 
       - name: Ejecutar Trivy (Reporte HTML)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
           format: 'template'
+          severity: 'CRITICAL,HIGH,MEDIUM'
           template: '@contrib/html.tpl'
           output: 'trivy-report.html'
 
