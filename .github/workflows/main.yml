@@ -62,22 +62,24 @@ jobs:
 
 ##opcion 2 con GitHub Security, formato SARIF, mas lindo visualmente
   analisis-sca-trivy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout de código
-          uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    needs: analisis-semgrep
+    steps:
+      - name: Checkout de código
+        uses: actions/checkout@v4
 
-        - name: Ejecutar Trivy (Reporte HTML)
-          uses: aquasecurity/trivy-action@master
-          with:
-            scan-type: 'fs'
-            scan-ref: '.'
-            format: 'template'
-            template: '@/contrib/html.tpl'
-            output: 'trivy-report.html'
+      - name: Ejecutar Trivy (Reporte HTML)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'template'
+          # Usamos la URL oficial de la plantilla HTML de Trivy
+          template: 'https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl'
+          output: 'trivy-report.html'
 
-        - name: Guardar reporte como artefacto web
-          uses: actions/upload-artifact@v4
-          with:
-            name: reporte-trivy-web
-            path: trivy-report.html
+      - name: Guardar reporte como artefacto web
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-trivy-web
+          path: trivy-report.html
