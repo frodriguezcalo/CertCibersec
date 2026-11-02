@@ -43,17 +43,41 @@ jobs:
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
-  analisis-sca-trivy:
-    runs-on: ubuntu-latest
-    needs: analisis-semgrep
-    steps:
-      - name: Checkout de código
-        uses: actions/checkout@v4
+## opcion 1: utilizando trivy con tabla en los logs de GitHub Actions
 
-      - name: Ejecutar Trivy SCA
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'             # fs es filesystem, para que analice todo 
-          scan-ref: '.'               # Raíz del proyecto
-          format: 'table'             # Muestra la tabla de resultados en el log de Actions
-          severity: 'MEDIUM,HIGH,CRITICAL'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
+  #analisis-sca-trivy:
+   # runs-on: ubuntu-latest
+    #needs: analisis-semgrep
+    #steps:
+    #  - name: Checkout de código
+    #    uses: actions/checkout@v4
+#
+#      - name: Ejecutar Trivy SCA
+#        uses: aquasecurity/trivy-action@master
+#        with:
+#          scan-type: 'fs'             # fs es filesystem, para que analice todo 
+#          scan-ref: '.'               # Raíz del proyecto
+#          format: 'table'             # Muestra la tabla de resultados en el log de Actions
+#          severity: 'MEDIUM,HIGH,CRITICAL'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
+
+##opcion 2 con GitHub Security, formato SARIF, mas lindo visualmente
+  analisis-sca-trivy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout de código
+          uses: actions/checkout@v4
+
+        - name: Ejecutar Trivy (Reporte HTML)
+          uses: aquasecurity/trivy-action@master
+          with:
+            scan-type: 'fs'
+            scan-ref: '.'
+            format: 'template'
+            template: '@/contrib/html.tpl'
+            output: 'trivy-report.html'
+
+        - name: Guardar reporte como artefacto web
+          uses: actions/upload-artifact@v4
+          with:
+            name: reporte-trivy-web
+            path: trivy-report.html
