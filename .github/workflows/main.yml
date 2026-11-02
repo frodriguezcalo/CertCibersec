@@ -57,8 +57,8 @@ jobs:
         with:
           scan-type: 'fs'             # fs es filesystem, para que analice todo 
           scan-ref: '.'               # Raíz del proyecto
-        format: 'table'             # Muestra la tabla de resultados en el log de Actions
-        severity: 'CRITICAL,HIGH,MEDIUM'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
+          format: 'table'             # Muestra la tabla de resultados en el log de Actions
+          severity: 'CRITICAL,HIGH,MEDIUM'  # Podemos sacarlo y eso incluye LOW y UNKNOWN
 
 ##opcion 2 con GitHub Security, formato SARIF, mas lindo visualmente
   ##analisis-sca-trivy:
